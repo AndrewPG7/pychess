@@ -21,12 +21,10 @@ class Translator:
             self.orig = self.convert(self.ent[0:2])
             self.new = self.convert(self.ent[3:5])
             return True
-        else:
-            return False
-            print('Input invalid')
 
     def convert(self, split):
         a = ord(split[0]) - 97
+        b = 0
         aux = split[1]
         if aux == '1':
             b = 7

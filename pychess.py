@@ -12,14 +12,17 @@ class GameBoard:
         self.row_nums = (8, 7, 6, 5, 4, 3, 2, 1)
         self.columns = 8
         self.columns_let = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
-        self.board = [[p.Rook('b'), p.Knight('b'), p.Bishop('b'), p.Queen('b'), p.King('b'), p.Bishop('b'), p.Knight('b'), p.Rook('b')],
+        self.board = [
+            [p.Rook('b'), p.Knight('b'), p.Bishop('b'), p.Queen('b'), p.King('b'), p.Bishop('b'), p.Knight('b'),
+             p.Rook('b')],
             [p.Pawn('b'), p.Pawn('b'), p.Pawn('b'), p.Pawn('b'), p.Pawn('b'), p.Pawn('b'), p.Pawn('b'), p.Pawn('b')],
             [p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank()],
             [p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank()],
             [p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank()],
             [p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank(), p.Blank()],
             [p.Pawn('w'), p.Pawn('w'), p.Pawn('w'), p.Pawn('w'), p.Pawn('w'), p.Pawn('w'), p.Pawn('w'), p.Pawn('w')],
-            [p.Rook('w'), p.Knight('w'), p.Bishop('w'), p.Queen('w'), p.King('w'), p.Bishop('w'), p.Knight('w'), p.Rook('w')]]
+            [p.Rook('w'), p.Knight('w'), p.Bishop('w'), p.Queen('w'), p.King('w'), p.Bishop('w'), p.Knight('w'),
+             p.Rook('w')]]
         self.draw_board()
 
     def set_board(self):
@@ -46,10 +49,15 @@ class GameBoard:
         print()
         print()
 
-    def move(self, orig, new):
-        m.Movement(orig, new, self.board)
-        print()
-        self.draw_board()
+    def move(self, w_turn, orig, new):
+        if (w_turn and self.board[orig[0]][orig[1]].is_white()) or \
+                (not w_turn and not self.board[orig[0]][orig[1]].is_white()):
+            m.Movement(orig, new, self.board)
+            print()
+            self.draw_board()
+            return True
+        else:
+            return False
 
 def clear():
     if name == 'nt':
@@ -57,16 +65,23 @@ def clear():
     else:
         system('clear')
 
+
 clear()
 print()
 print('                -- Chess Prototype --')
 print()
+player_w = input('Whites player name: ')
+player_b = input('Blacks player name: ')
+player_w_turn = True
 game = GameBoard()
-ent = input('Input movement: ')
+ent = ''
 while ent != 'exit':
+    ent = input('Input movement: ')
     mov = t.Translator()
     if mov.translate(ent):
-        game.move(mov.orig, mov.new)
-    ent = input('Input movement: ')
+        if game.move(player_w_turn, mov.orig, mov.new):
+            player_w_turn = not player_w_turn
+        else:
+            print('Move your pieces')
 clear()
 print('See you next time')
